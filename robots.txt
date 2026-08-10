@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://poisedautomation.netlify.app/sitemap.xml

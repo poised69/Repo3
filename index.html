@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Poised Automation | Custom AI Automation Systems for Business</title>
+<meta name="description" content="Poised Automation builds custom AI systems that spot what matters in your business, work out the next step, and act on it. You stay in control of anything that goes out. Based in Jeju, South Korea, working worldwide.">
+<meta name="author" content="Poised Automation">
+<meta name="theme-color" content="#F7FAFC" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1F2E" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://poisedautomation.netlify.app/">
+
+<!-- Open Graph / social -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Poised Automation">
+<meta property="og:title" content="Poised Automation | Automation that thinks before it acts.">
+<meta property="og:description" content="Custom AI systems that handle the repetitive digital work. They detect, evaluate and draft. A human approves anything that matters.">
+<meta property="og:url" content="https://poisedautomation.netlify.app/">
+<meta property="og:image" content="https://poisedautomation.netlify.app/assets/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Poised Automation. Automation that thinks before it acts.">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Poised Automation | Automation that thinks before it acts.">
+<meta name="twitter:description" content="Custom AI automation, built around one real bottleneck at a time.">
+<meta name="twitter:image" content="https://poisedautomation.netlify.app/assets/img/og.jpg">
+
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+
+<link rel="preload" href="assets/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/styles.css">
+<script>document.documentElement.classList.add('js');</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Poised Automation",
+  "description": "Custom AI automation systems for businesses. Poised Automation designs, builds and refines systems that detect a signal, evaluate it with AI, and act on it, with a human checkpoint on anything sensitive.",
+  "url": "https://poisedautomation.netlify.app/",
+  "email": "poisedautomation@gmail.com",
+  "image": "https://poisedautomation.netlify.app/assets/img/og.jpg",
+  "logo": "https://poisedautomation.netlify.app/assets/img/favicon.svg",
+  "slogan": "Automation that thinks before it acts.",
+  "priceRange": "$$",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Jeju",
+    "addressCountry": "KR"
+  },
+  "areaServed": "Worldwide",
+  "knowsAbout": ["AI automation", "Make.com", "workflow automation", "Airtable", "business process automation", "AI agents"],
+  "makesOffer": [
+    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Custom AI workflow automation" } },
+    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Lead qualification and follow-up systems" } },
+    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Make.com scenario design and build" } }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <a class="brand" href="#top" aria-label="Poised Automation, home">
+      <span class="brand__mark" aria-hidden="true">
+        <svg viewBox="0 0 40 24" width="40" height="24" fill="none" focusable="false">
+          <defs>
+            <linearGradient id="flowGrad" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0%" stop-color="#7EC8E3"/>
+              <stop offset="100%" stop-color="#2E5C7A"/>
+            </linearGradient>
+          </defs>
+          <path class="mark__line" d="M2 18C10 18 12 6 20 6s10 6 16 6"
+                stroke="url(#flowGrad)" stroke-width="2.4" stroke-linecap="round"/>
+          <circle class="mark__dot" r="2.6" fill="#F2A488"/>
+        </svg>
+      </span>
+      <span class="brand__word">Poised&nbsp;Automation</span>
+    </a>
+
+    <nav class="nav__links" aria-label="Primary">
+      <a href="#what">What we do</a>
+      <a href="#process">How it works</a>
+      <a href="#why">Why it matters</a>
+      <a href="#about">About</a>
+    </nav>
+
+    <a class="btn btn--accent btn--sm nav__cta" href="#contact">Start a conversation</a>
+
+    <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">
+      <span></span><span></span>
+    </button>
+  </div>
+  <div class="nav__mobile" id="mobileMenu" hidden>
+    <a href="#what">What we do</a>
+    <a href="#process">How it works</a>
+    <a href="#why">Why it matters</a>
+    <a href="#about">About</a>
+    <a href="#contact">Start a conversation</a>
+  </div>
+</header>
+
+<main id="main">
+  <span id="top"></span>
+
+  <!-- ── HERO ───────────────────────────────────────────────── -->
+  <section class="hero" id="hero">
+    <canvas class="hero__canvas" id="skyCanvas" aria-hidden="true"></canvas>
+    <div class="hero__glow" aria-hidden="true"></div>
+
+    <div class="wrap hero__inner">
+      <div class="hero__copy">
+        <p class="eyebrow reveal">AI automation studio in Jeju, South Korea</p>
+        <h1 class="reveal">Automation that <em>thinks</em> before it acts.</h1>
+        <p class="lede reveal">
+          Poised Automation builds custom AI systems that handle the repetitive digital work
+          inside a business. They spot what matters, think it through, and get the next step
+          ready. You stay in control of anything that actually goes out the door.
+        </p>
+        <div class="hero__actions reveal">
+          <a class="btn btn--accent" href="#contact">Start a conversation</a>
+          <a class="btn btn--ghost" href="#what">See how it works <span aria-hidden="true">↓</span></a>
+        </div>
+        <p class="hero__meta reveal">
+          Built one bottleneck at a time. No templates, no agency layers.
+        </p>
+      </div>
+
+      <div class="hero__visual reveal" aria-hidden="true">
+        <div class="pipeline pipeline--hero">
+          <!-- pipeline injected pattern: see .pipeline component below -->
+          <svg viewBox="0 0 420 300" class="pipe" role="presentation" focusable="false">
+            <defs>
+              <linearGradient id="pipeGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#7EC8E3"/>
+                <stop offset="100%" stop-color="#A8B8D8"/>
+              </linearGradient>
+            </defs>
+            <path class="pipe__track" d="M60 40 H300 a30 30 0 0 1 30 30 v40 a30 30 0 0 1 -30 30 H120 a30 30 0 0 0 -30 30 v40 a30 30 0 0 0 30 30 h240"/>
+            <circle class="pipe__packet pipe__packet--1" r="5"/>
+            <circle class="pipe__packet pipe__packet--2" r="5"/>
+            <circle class="pipe__packet pipe__packet--3" r="4"/>
+            <g class="pipe__node" transform="translate(60,40)"><circle r="9"/></g>
+            <g class="pipe__node" transform="translate(330,90)"><circle r="9"/></g>
+            <g class="pipe__node" transform="translate(90,190)"><circle r="9"/></g>
+            <g class="pipe__node pipe__node--end" transform="translate(360,240)"><circle r="9"/></g>
+          </svg>
+          <ul class="pipeline__labels">
+            <li><span class="dot"></span>Signal detected</li>
+            <li><span class="dot"></span>AI evaluates</li>
+            <li><span class="dot"></span>Human checkpoint</li>
+            <li><span class="dot"></span>Action taken</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__scroll" aria-hidden="true"><span></span></div>
+  </section>
+
+  <!-- ── PROBLEM ────────────────────────────────────────────── -->
+  <section class="section section--tight" id="problem">
+    <div class="wrap narrow">
+      <h2 class="reveal">Most of the work isn't hard. There's just too much of it.</h2>
+      <p class="big reveal">
+        Checking the inbox again. Copying the same details into the same sheet. Sorting what's
+        urgent from what isn't. Following up because nobody else will.
+      </p>
+      <p class="big reveal">
+        None of it needs your judgement. It only needs your oversight. And it quietly eats
+        hours a week that belong somewhere else.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── WHAT WE DO ─────────────────────────────────────────── -->
+  <section class="section band" id="what">
+    <div class="wrap">
+      <header class="section__head reveal">
+        <p class="eyebrow">What Poised Automation does</p>
+        <h2>Three moves, running quietly in the background.</h2>
+        <p class="sub">
+          Every system is built around the same simple shape. Watch, think, act. All of it wired
+          into the tools a business already uses.
+        </p>
+      </header>
+
+      <div class="flowgrid">
+        <ol class="steps">
+          <li class="step reveal" data-step="1">
+            <span class="step__num" aria-hidden="true">01</span>
+            <h3>Detect</h3>
+            <p>The system watches for the signal that matters. A new lead, an order, a form, a
+              message, a deadline creeping up. It never gets distracted and never forgets to look.</p>
+          </li>
+          <li class="step reveal" data-step="2">
+            <span class="step__num" aria-hidden="true">02</span>
+            <h3>Think</h3>
+            <p>An AI model reads what came in and works out the next step. Is this worth your time,
+              what does it need, what should the reply say, where does it belong. Reasoning, not
+              keyword matching.</p>
+          </li>
+          <li class="step reveal" data-step="3">
+            <span class="step__num" aria-hidden="true">03</span>
+            <h3>Act, with you in the loop</h3>
+            <p>It logs, files, notifies and drafts. Anything that leaves the building or costs money
+              waits for your approval, usually one tap away in a message. Nothing sensitive happens
+              without a sign-off.</p>
+          </li>
+        </ol>
+
+        <figure class="flowviz reveal">
+          <div class="pipeline pipeline--vertical" aria-hidden="true">
+            <svg viewBox="0 0 260 360" class="pipe pipe--v" role="presentation" focusable="false">
+              <path class="pipe__track" d="M130 30 V110 M130 130 V230 M130 250 V330"/>
+              <circle class="pipe__packet pipe__packet--v1" r="5"/>
+              <circle class="pipe__packet pipe__packet--v2" r="5"/>
+              <g class="pipe__station" transform="translate(130,30)">
+                <circle class="pipe__ring" r="22"/><circle class="pipe__core" r="7"/>
+              </g>
+              <g class="pipe__station pipe__station--think" transform="translate(130,180)">
+                <circle class="pipe__ring" r="30"/><circle class="pipe__ring pipe__ring--2" r="22"/>
+                <circle class="pipe__core" r="8"/>
+              </g>
+              <g class="pipe__station" transform="translate(130,330)">
+                <circle class="pipe__ring" r="22"/><circle class="pipe__core pipe__core--accent" r="7"/>
+              </g>
+            </svg>
+          </div>
+          <figcaption>
+            A signal arrives, the model reasons about it, and the result lands where it belongs.
+            There is always a checkpoint before anything irreversible.
+          </figcaption>
+        </figure>
+      </div>
+
+      <p class="stack reveal">
+        <span class="stack__label">Typically built with</span>
+        <span class="chip">Make.com</span>
+        <span class="chip">Claude &amp; other AI models</span>
+        <span class="chip">Airtable</span>
+        <span class="chip">Telegram / Slack checkpoints</span>
+        <span class="chip">Your existing tools</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- ── PROCESS ────────────────────────────────────────────── -->
+  <section class="section" id="process">
+    <div class="wrap">
+      <header class="section__head section__head--left reveal">
+        <p class="eyebrow">How it works</p>
+        <h2>Four steps, start to running system.</h2>
+      </header>
+
+      <ol class="process">
+        <li class="proc reveal">
+          <span class="proc__idx">Discover</span>
+          <p>A short conversation to find the one real bottleneck worth automating first. Not a
+            roadmap of twelve. The single thing that costs the most and repeats the most.</p>
+        </li>
+        <li class="proc reveal">
+          <span class="proc__idx">Design</span>
+          <p>Map the exact workflow on paper. What triggers it, what the AI decides, what data it
+            needs, and exactly where a human checks in before anything goes out.</p>
+        </li>
+        <li class="proc reveal">
+          <span class="proc__idx">Build</span>
+          <p>The system gets built and connected to your real tools. No long agency timeline, no new
+            platform for your team to learn. It runs where your work already lives.</p>
+        </li>
+        <li class="proc reveal">
+          <span class="proc__idx">Refine</span>
+          <p>It runs against real traffic, gets watched, and gets tightened. Edge cases surface in
+            week one, and that is the point of staying close after launch.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ── WHY IT MATTERS ─────────────────────────────────────── -->
+  <section class="section band band--dark" id="why">
+    <div class="wrap">
+      <header class="section__head reveal">
+        <p class="eyebrow">Why it matters</p>
+        <h2>What actually changes on Monday morning.</h2>
+      </header>
+
+      <div class="cards">
+        <article class="card reveal">
+          <h3>Hours come back</h3>
+          <p>The checking, sorting and chasing stop landing on a person. What's left is the work
+            that needed a person in the first place.</p>
+        </article>
+        <article class="card reveal">
+          <h3>Nothing slips</h3>
+          <p>A system doesn't get busy on Thursday afternoon. Every lead gets looked at, every
+            follow-up gets queued, every record gets written.</p>
+        </article>
+        <article class="card reveal">
+          <h3>Control stays with you</h3>
+          <p>Drafts, not sends. Recommendations, not spends. The automation does the thinking and
+            the typing. The final call stays human.</p>
+        </article>
+        <article class="card reveal">
+          <h3>Fitted, not adapted</h3>
+          <p>Built around how your business already works, instead of a generic tool you have to
+            reshape your process around.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── ABOUT ──────────────────────────────────────────────── -->
+  <section class="section" id="about">
+    <div class="wrap about">
+      <div class="about__copy">
+        <p class="eyebrow reveal">Who's behind it</p>
+        <h2 class="reveal">One engineer, working directly with you.</h2>
+        <p class="reveal">
+          Poised Automation is built and run by a single automation engineer. The person who scopes
+          the problem is the person who writes the system and the person who answers when something
+          needs adjusting. No account managers, no handoffs, no layer between the brief and the build.
+        </p>
+        <p class="reveal">
+          Based in Jeju, South Korea, working with businesses wherever they are. The work is remote
+          by nature and time zones have never been the hard part. What matters more is that each
+          system is small, specific and properly finished.
+        </p>
+        <p class="reveal signature">
+          <span class="signature__rule" aria-hidden="true"></span>
+          Custom AI automation, engineered. Not templated.
+        </p>
+      </div>
+      <aside class="about__panel reveal" aria-label="At a glance">
+        <dl>
+          <div><dt>Studio</dt><dd>Poised Automation</dd></div>
+          <div><dt>Based in</dt><dd>Jeju, South Korea</dd></div>
+          <div><dt>Works with</dt><dd>Businesses worldwide, remotely</dd></div>
+          <div><dt>Focus</dt><dd>AI-driven workflow automation</dd></div>
+          <div><dt>Approach</dt><dd>One bottleneck at a time</dd></div>
+        </dl>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ────────────────────────────────────────────── -->
+  <section class="section contact" id="contact">
+    <div class="wrap narrow">
+      <header class="section__head reveal">
+        <p class="eyebrow">Get in touch</p>
+        <h2>Let's find the bottleneck worth automating.</h2>
+        <p class="sub">
+          Tell me the task you would hand off tomorrow if you could. One line is enough. I will reply
+          with whether it is a good first candidate and what it would take.
+        </p>
+      </header>
+
+      <!-- Netlify picks this form up automatically at deploy time (free tier: 100
+           submissions/month). On any other host the POST fails and main.js falls
+           back to opening the visitor's mail client. -->
+      <form class="form reveal" id="contactForm" name="contact" method="POST"
+            data-netlify="true" netlify-honeypot="bot-field" novalidate>
+        <input type="hidden" name="form-name" value="contact">
+        <div class="field">
+          <label for="name">Your name</label>
+          <input id="name" name="name" type="text" autocomplete="name" required>
+          <p class="err" data-err="name" hidden>Please add your name.</p>
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email" required>
+          <p class="err" data-err="email" hidden>Please add a valid email address.</p>
+        </div>
+        <div class="field">
+          <label for="task">The repetitive task, in one line</label>
+          <textarea id="task" name="task" rows="3" required
+            placeholder="e.g. Every enquiry from the site gets read, sorted and replied to by hand."></textarea>
+          <p class="err" data-err="task" hidden>A sentence is plenty. Just so I know what we are looking at.</p>
+        </div>
+        <!-- honeypot: real people never see it, bots fill it in -->
+        <div class="hp" aria-hidden="true">
+          <label for="bot-field">Company</label>
+          <input id="bot-field" name="bot-field" type="text" tabindex="-1" autocomplete="off">
+        </div>
+        <button class="btn btn--accent btn--block" type="submit" id="submitBtn">Send it over</button>
+        <p class="form__status" id="formStatus" role="status" aria-live="polite"></p>
+        <p class="form__alt">
+          Prefer plain email? <a href="mailto:poisedautomation@gmail.com">poisedautomation@gmail.com</a>
+        </p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <div class="footer__brand">
+      <svg viewBox="0 0 40 24" width="40" height="24" fill="none" role="img" aria-label="Poised Automation">
+        <path d="M2 18C10 18 12 6 20 6s10 6 16 6" stroke="#7EC8E3" stroke-width="2.4" stroke-linecap="round"/>
+        <circle cx="36" cy="12" r="2.6" fill="#F2A488"/>
+      </svg>
+      <span>Poised Automation</span>
+    </div>
+    <nav class="footer__nav" aria-label="Footer">
+      <a href="#what">What we do</a>
+      <a href="#process">How it works</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="footer__meta">
+      <a href="mailto:poisedautomation@gmail.com">poisedautomation@gmail.com</a>
+      <span>Jeju, South Korea, working worldwide</span>
+      <span class="footer__copy">© <span id="year">2026</span> Poised Automation</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js" defer></script>
+</body>
+</html>
