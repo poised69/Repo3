@@ -304,7 +304,7 @@
 
       var sent = function () {
         form.reset();
-        say('Got it, thank you. You\'ll hear back from me within a day.', 'ok');
+        say('Got it, thank you. You\'ll hear back from us within a day.', 'ok');
       };
 
       /* 1. an explicit endpoint (Formspree or similar) wins */
