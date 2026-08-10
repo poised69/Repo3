@@ -1,13 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Poised Automation">
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#7EC8E3"/>
-      <stop offset="100%" stop-color="#2E5C7A"/>
+    <linearGradient id="g" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#9FD8EC"/>
+      <stop offset="100%" stop-color="#5FA8CB"/>
     </linearGradient>
   </defs>
-  <rect width="64" height="64" rx="16" fill="#0F1F2E"/>
-  <rect x="4.5" y="4.5" width="55" height="55" rx="14" fill="none" stroke="url(#g)" stroke-width="1.6" opacity=".45"/>
-  <path d="M21 46V18h9.5a8.5 8.5 0 0 1 0 17H21" fill="none" stroke="url(#g)" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M31.5 46l8.5-22 8.5 22M34.8 38.6h10.4" fill="none" stroke="url(#g)" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="32" cy="8.5" r="2.6" fill="#F2A488"/>
+  <rect width="64" height="64" rx="15" fill="#0F1F2E"/>
+  <path d="M9 42C21 42 24 22 34 22s12 10 20 10" fill="none" stroke="url(#g)" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="54" cy="32" r="4.6" fill="#F2A488"/>
 </svg>

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Poised Automation — interactions
+   Poised Automation, page interactions
    No dependencies. Everything degrades to a working static page.
    ========================================================================== */
 (function () {
@@ -7,10 +7,10 @@
 
   /* Where contact-form submissions go, in order of preference:
        1. FORM_ENDPOINT below, if set (a Formspree URL, a serverless function,
-          a Make.com webhook — anything that accepts a JSON POST).
+          a Make.com webhook, or anything that accepts a JSON POST).
        2. Netlify Forms, picked up automatically when the site is hosted on
           Netlify (the form carries data-netlify="true").
-       3. The visitor's own mail client, pre-filled — always works, anywhere. */
+       3. The visitor's own mail client, pre-filled. Always works, anywhere. */
   var FORM_ENDPOINT = '';
   var EMAIL = 'poisedautomation@gmail.com';
 
@@ -276,7 +276,7 @@
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var hp = form.elements['bot-field'];
-      if (hp && hp.value) return; /* honeypot filled — silently drop */
+      if (hp && hp.value) return; /* honeypot filled, silently drop */
 
       if (!validate()) {
         say('Just a couple of fields to fix above.', 'err');
@@ -292,7 +292,7 @@
       };
 
       var mailtoFallback = function (note) {
-        var subject = 'Automation enquiry — ' + data.name;
+        var subject = 'Automation enquiry from ' + data.name;
         var body = 'Name: ' + data.name + '\nEmail: ' + data.email +
                    '\n\nThe repetitive task:\n' + data.task + '\n';
         window.location.href = 'mailto:' + EMAIL +
@@ -304,7 +304,7 @@
 
       var sent = function () {
         form.reset();
-        say('Got it — thank you. You\'ll hear back from me within a day.', 'ok');
+        say('Got it, thank you. You\'ll hear back from me within a day.', 'ok');
       };
 
       /* 1. an explicit endpoint (Formspree or similar) wins */
@@ -319,7 +319,7 @@
           if (!res.ok) throw new Error('bad response');
           sent();
         }).catch(function () {
-          mailtoFallback('Couldn\'t reach the form service — opening your email app instead.');
+          mailtoFallback('Couldn\'t reach the form service. Opening your email app instead.');
         }).then(function () {
           submit.disabled = false;
         });
@@ -341,7 +341,7 @@
           if (!res.ok) throw new Error('bad response');
           sent();
         }).catch(function () {
-          /* not on Netlify (or forms disabled) — hand it to the mail client */
+          /* not on Netlify, or forms are disabled, so hand it to the mail client */
           mailtoFallback();
         }).then(function () {
           submit.disabled = false;
