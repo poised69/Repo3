@@ -12,7 +12,7 @@
           Netlify (the form carries data-netlify="true").
        3. The visitor's own mail client, pre-filled. Always works, anywhere. */
   var FORM_ENDPOINT = '';
-  var EMAIL = 'poisedautomation@gmail.com';
+  var EMAIL = 'info.poisedautomation@gmail.com';
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
