@@ -22,6 +22,10 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      # pod-town/ is a local-only monitoring app, not part of the public site.
+      # The artifact path is ".", so without this it would be published.
+      - name: Exclude local-only directories from the published site
+        run: rm -rf pod-town
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

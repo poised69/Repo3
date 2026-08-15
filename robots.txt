@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /pod-town/
 
 Sitemap: https://poisedautomation.netlify.app/sitemap.xml

@@ -1,0 +1,16 @@
+{
+  "name": "pod-town",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local pixel-art town that visualises the live state of the POD Make.com automation pipeline. Read-only, zero Make operations.",
+  "type": "module",
+  "main": "server/index.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "doctor": "node server/doctor.js"
+  },
+  "dependencies": {}
+}
