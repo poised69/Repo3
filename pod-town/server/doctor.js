@@ -16,6 +16,9 @@ import { findRunning } from './makePoller.js';
 const tick = (ok) => (ok ? '  ok  ' : ' FAIL ');
 const line = (ok, text) => console.log(`[${tick(ok)}] ${text}`);
 
+/** Set when a failure looks like network egress rather than a bad credential. */
+let blockedByNetwork = false;
+
 async function checkMake() {
   console.log('\n— Make ————————————————————————————————');
 
@@ -36,12 +39,20 @@ async function checkMake() {
         headers: { Authorization: `Token ${config.make.token}`, Accept: 'application/json' },
       });
 
-      if (res.status === 401 || res.status === 403) {
-        line(false, `${scenario.name}: token rejected (${res.status}). Check the token and its scopes.`);
-        continue;
-      }
       if (!res.ok) {
-        line(false, `${scenario.name}: HTTP ${res.status}`);
+        const snippet = await res.text().then((t) => t.slice(0, 160)).catch(() => '');
+        const fromMake = snippet.trimStart().startsWith('{');
+
+        if (res.status === 401) {
+          line(false, `${scenario.name}: token rejected (401). Check MAKE_API_TOKEN.`);
+        } else if (res.status === 403 && fromMake) {
+          line(false, `${scenario.name}: Make refused the token (403) - it likely lacks scenarios:read.`);
+        } else if (res.status === 403) {
+          line(false, `${scenario.name}: blocked before reaching Make (403 from a proxy/VPN/firewall).`);
+          blockedByNetwork = true;
+        } else {
+          line(false, `${scenario.name}: HTTP ${res.status}`);
+        }
         continue;
       }
 
@@ -82,7 +93,13 @@ async function checkTelegram() {
 
   const me = await call('getMe');
   if (!me.body?.ok) {
-    line(false, `getMe failed: ${me.body?.description || me.status}`);
+    // A non-JSON body means something intercepted the request before Telegram.
+    if (me.body === null) {
+      line(false, `getMe: blocked before reaching Telegram (HTTP ${me.status} from a proxy/VPN/firewall).`);
+      blockedByNetwork = true;
+    } else {
+      line(false, `getMe failed: ${me.body?.description || me.status}`);
+    }
     return;
   }
   line(true, `Authenticated as @${me.body.result.username}`);
@@ -134,4 +151,14 @@ console.log(`Server        : http://${config.server.host}:${config.server.port}`
 
 await checkMake();
 await checkTelegram();
+
+if (blockedByNetwork) {
+  console.log(
+    '\n! Some requests never reached Make/Telegram - they were refused by a\n' +
+      '  proxy, VPN, or firewall on this machine. Your tokens may be perfectly\n' +
+      '  fine. Retry on a network that allows outbound HTTPS to eu1.make.com\n' +
+      '  and api.telegram.org.',
+  );
+}
+
 console.log('\nDone. No Make operations were consumed.\n');

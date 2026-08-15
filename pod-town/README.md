@@ -89,6 +89,22 @@ An earlier history-only pull showed nothing but `EXECUTION_END` events, which is
 what raised the doubt. That was just because nothing happened to be running at
 the time.
 
+There is also a second, more direct live signal:
+`GET /scenarios/{id}/executions/{executionId}` returns `{"status": "RUNNING"}`
+while a run is in flight and `{"status": "SUCCESS"}` once it finishes. The
+poller does not use it, because it needs an `executionId` you can only get from
+the list endpoint anyway — one call per scenario is cheaper than two.
+
+**No per-module detail exists, running or finished.** Tested directly against a
+purpose-built scenario (`SetVariable → Sleep 90s → SetVariable`): mid-flight the
+detail endpoint returned `{"status":"RUNNING"}` and nothing else, and *after
+completion* it returned `{"status":"SUCCESS"}` and nothing else — no module
+inputs, outputs, or execution order at any point.
+
+This matters more than it sounds: it means BBW's route **cannot be recovered
+from Make at all**, not live and not retroactively. Identifying which of the 12
+routes fired requires Telegram (or shim mode). There is no Make-only workaround.
+
 ### Telegram — which BBW route fired
 
 Every BBW route is gated on a distinct inline-keyboard `callback_query.data`
@@ -99,6 +115,24 @@ value, so the button press identifies the building.
 (`telegram:WatchUpdates`, hook 3524270). `getUpdates` will most likely return
 **409 Conflict**. `npm run doctor` tests this against the real bot and tells you
 which case you are in.
+
+Checked via the Make API on 2026-08-15, that hook is `enabled: true`,
+`gone: false`, type `telegramapi`, bound to the active BBW scenario and serving
+`https://hook.eu1.make.com/264jmymo…`. Make registers that URL with Telegram
+through `setWebhook`, so the 409 is the expected outcome and `blocked` mode is
+the likely steady state. Combined with the finding above — that Make exposes no
+per-module detail — the practical consequence is:
+
+> Out of the box you get **live per-execution detection for the three scheduled
+> scenarios**, plus a "BBW is running" indicator. Per-route animation for the
+> seven BBW buildings needs shim mode.
+
+Shim mode requires putting a relay in front of BBW's webhook so each callback is
+also written to a local file. That is a change to live infrastructure, so weigh
+it against how much the per-route animation is worth to you. Adding a module
+inside BBW to log the callback would be simpler, but it would consume an
+operation on every run and modify a live scenario, so it is deliberately not
+suggested here.
 
 The app detects this at startup and degrades honestly. It has four modes:
 
@@ -244,8 +278,16 @@ likely the Make token is missing or rejected.
 **Buildings never light for BBW buttons.** Expected if Telegram is in `blocked`
 mode — see §3. The panel shows the mode.
 
-**"Token rejected (401/403)".** The token is wrong, revoked, or lacks
-`scenarios:read`. The poller backs off for 60s rather than hammering.
+**"Token rejected (401)".** The token is wrong or revoked. The poller backs off
+for 60s rather than hammering.
+
+**"Blocked before reaching Make/Telegram (403 from a proxy/VPN/firewall)".**
+Your token is probably fine — something on the network refused the request
+before it ever left the machine. A corporate proxy, VPN, or sandboxed
+environment will do this. Both APIs are distinguished by their response body:
+Make and Telegram answer JSON, a proxy answers HTML or plain text, and `doctor`
+reports which it saw. Retry on a network that allows outbound HTTPS to
+`eu1.make.com` and `api.telegram.org`.
 
 **A button lights nothing and a note appears.** A callback value exists in BBW
 that is not in the mapping — most likely a button added after 2026-08-15.

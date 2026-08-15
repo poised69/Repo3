@@ -144,8 +144,16 @@ export class MakePoller {
     }
 
     if (!res.ok) {
+      // Keep a snippet of the body: it is how we tell a genuine Make rejection
+      // (JSON) from a corporate proxy or VPN refusing the request (HTML/text).
+      const snippet = await res
+        .text()
+        .then((t) => t.slice(0, 200))
+        .catch(() => '');
       const err = new Error(`Make API ${res.status}`);
       err.status = res.status;
+      err.snippet = snippet;
+      err.looksLikeMake = snippet.trimStart().startsWith('{');
       throw err;
     }
 
@@ -156,9 +164,17 @@ export class MakePoller {
 
   #handleError(err, target) {
     let detail;
-    if (err.status === 401 || err.status === 403) {
-      detail = 'Make rejected the token (401/403). Check MAKE_API_TOKEN and that it has scenarios:read.';
+    if (err.status === 401) {
+      detail = 'Make rejected the token (401). Check MAKE_API_TOKEN and that it has scenarios:read.';
       // No point hammering a bad token.
+      this.backoffUntil = Date.now() + 60_000;
+    } else if (err.status === 403) {
+      // A 403 is ambiguous: it can come from Make (token lacks scope) or from a
+      // proxy/VPN refusing the CONNECT. The body tells them apart - Make
+      // answers JSON, a proxy answers HTML or plain text.
+      detail = err.looksLikeMake
+        ? 'Make refused the token (403). It is probably missing scenarios:read.'
+        : 'Blocked before reaching Make (403 from a proxy, VPN, or firewall) - the token may be fine.';
       this.backoffUntil = Date.now() + 60_000;
     } else if (err.status === 429) {
       detail = 'Make rate limit hit (429) - backing off for 60s.';
