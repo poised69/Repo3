@@ -3,6 +3,15 @@
   publish = "."
   command = ""
 
+# pod-town/ is a local-only monitoring app that runs on the operator's laptop.
+# The publish root is ".", so without this rule its files would be served
+# publicly. Block the whole path.
+[[redirects]]
+  from = "/pod-town/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
 [[headers]]
   for = "/*"
   [headers.values]
