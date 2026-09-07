@@ -6,14 +6,19 @@
   'use strict';
 
   /* Where contact-form submissions go, in order of preference:
-       1. FORM_ENDPOINT below, if set (a Formspree URL, a serverless function,
-          a Make.com webhook, or anything that accepts a JSON POST).
+       1. FORM_ENDPOINT below, if set. Currently a Make.com webhook, posted
+          as form-urlencoded.
        2. Netlify Forms, picked up automatically when the site is hosted on
           Netlify (the form carries data-netlify="true").
        3. A chooser offering Gmail, Outlook web, the visitor's own mail app, or
           copy to clipboard. Deliberately NOT a bare mailto: redirect: on Windows
           that hands the visitor to Outlook, which most of them never use. */
-  var FORM_ENDPOINT = '';
+
+  /* Make scenario "Poised - Website Enquiry Intake" (eu1, scenario 7285409).
+     It writes the enquiry to the Website Enquiries Airtable base and an Airtable
+     automation emails it on. This URL is public by necessity, since it ships in
+     the page, so the scenario does nothing destructive and only ever appends. */
+  var FORM_ENDPOINT = 'https://hook.eu1.make.com/5hxm2vteax2cum0p3lwoyxete2shm31y';
   var EMAIL = 'info.poisedautomation@gmail.com';
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -380,14 +385,19 @@
         say('Got it, thank you. You\'ll hear back from us within a day.', 'ok');
       };
 
-      /* 1. an explicit endpoint (Formspree or similar) wins */
+      /* 1. an explicit endpoint (the Make webhook) wins */
       if (FORM_ENDPOINT) {
         submit.disabled = true;
         say('Sending…');
+        /* Sent as form-urlencoded on purpose. That content type is CORS
+           safelisted, so the browser posts straight away instead of first
+           asking the endpoint to answer a preflight OPTIONS it may not
+           handle. Passing URLSearchParams as the body sets the header. */
+        var payload = new URLSearchParams();
+        Object.keys(data).forEach(function (k) { payload.append(k, data[k]); });
         fetch(FORM_ENDPOINT, {
           method: 'POST',
-          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
+          body: payload
         }).then(function (res) {
           if (!res.ok) throw new Error('bad response');
           sent();

@@ -111,16 +111,47 @@ grep -rl "poisedautomation.netlify.app" . | xargs sed -i 's#https://poisedautoma
 
 `assets/js/main.js` tries three things in order and stops at the first one that works.
 
-1. **`FORM_ENDPOINT`**, at the top of the file, empty by default. Set it to a Formspree
-   URL, a Make.com webhook, or any endpoint that accepts a JSON `POST` of
-   `{name, email, task}`. A Make.com webhook is the obvious choice here. The enquiry lands
-   straight in a scenario that can qualify it, log it to Airtable and ping you on Telegram.
-2. **Netlify Forms**, automatic when the site is hosted on Netlify. Nothing to configure in
-   code.
-3. **`mailto:`**, which opens the visitor's mail client with the message already filled in.
-   Always works, on any host, with no backend at all.
+1. **`FORM_ENDPOINT`**, at the top of the file. This is the live path: a Make webhook that
+   writes the enquiry to Airtable, which then emails it on. Details below.
+2. **Netlify Forms**, automatic when the site is hosted on Netlify. Kept as a backstop in
+   case the webhook is ever unreachable. Note that form detection has to be switched on in
+   the Netlify project or this tier does nothing.
+3. **A send-destination chooser.** If neither of the above accepts the submission, the
+   visitor is offered Gmail, Outlook on the web, their own mail app, or copy to clipboard,
+   all pre-filled. This deliberately replaced a bare `mailto:` redirect, which on Windows
+   threw people into Outlook whether they used it or not.
 
 A hidden honeypot field called `bot-field` silently drops the most common spam bots.
+
+### The live intake pipeline
+
+```
+contact form  ──POST──▶  Make webhook  ──▶  Airtable row  ──▶  Airtable automation
+                         (scenario 7285409)   (Enquiries)        emails info.poised...
+```
+
+| Piece | Where |
+|---|---|
+| Make scenario | "Poised - Website Enquiry Intake", id `7285409`, team `2185811`, eu1 |
+| Make webhook | hook id `3678311` |
+| Airtable base | "Poised Automation — Website Enquiries", `appvJfOM2Csxn8MXD` |
+| Airtable table | `Enquiries`, `tbl5FdGw85HxAMZqU` |
+| Airtable automation | "Email me a new website enquiry", `wfl5uAlWArOmdanJu` |
+
+The Make scenario ends with a Webhook Response module that returns `200` with
+`Access-Control-Allow-Origin: *`. Without that header the browser would block the page from
+reading the reply and the form would fall through to tier 3 even on a successful save. The
+POST is sent form-urlencoded rather than JSON on purpose: that content type is CORS
+safelisted, so the browser skips the preflight `OPTIONS` request entirely.
+
+The email is sent by Airtable, not by Make. Make's Gmail module rejects both Gmail
+connections in the account as incompatible, so rather than block on re-authorising, the
+notification uses Airtable's built-in `sendEmail`, which needs no credential. The visitor's
+address is set as Reply-To, so replying answers them directly.
+
+The webhook URL ships in public JavaScript, which is unavoidable for a browser-submitted
+form. The scenario only ever appends a row, so the worst a stranger can do is create junk
+records and spend Make operations.
 
 ---
 
