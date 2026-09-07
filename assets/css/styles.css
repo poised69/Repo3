@@ -496,6 +496,50 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .form__status.is-err { color: #A8442E; }
 .form__alt { margin: 1rem 0 0; font-size: .9rem; color: var(--mist); text-align: center; }
 
+/* Send-destination chooser. Only appears when the submission could not be sent
+   in the background, so the visitor picks their own webmail instead of being
+   thrown at whatever desktop client the OS has registered. */
+.sendvia {
+  margin-top: 1.15rem;
+  padding: 1.1rem 1.15rem 1.15rem;
+  background: var(--sky-wash);
+  border: 1px solid var(--sky-soft);
+  border-radius: var(--radius-sm);
+}
+.sendvia__lead {
+  margin: 0 0 .85rem;
+  font-size: .92rem;
+  font-weight: 500;
+  color: var(--deep-ink);
+}
+.sendvia__opts { display: flex; flex-wrap: wrap; gap: .5rem; }
+.sendvia__opt {
+  font-family: var(--font-display);
+  font-size: .88rem; font-weight: 600; line-height: 1;
+  color: var(--deep);
+  background: var(--cloud-2);
+  border: 1px solid var(--sky-soft);
+  border-radius: 999px;
+  padding: .62rem 1rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .2s var(--ease), border-color .2s var(--ease),
+              box-shadow .2s var(--ease), background-color .2s var(--ease);
+}
+.sendvia__opt:hover {
+  transform: translateY(-2px);
+  border-color: var(--deep);
+  box-shadow: var(--shadow-sm);
+}
+/* the visitor already typed their own address, so the matching webmail is marked */
+.sendvia__opt.is-suggested {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--night);
+}
+.sendvia__opt.is-suggested:hover { background: var(--accent-hi); border-color: var(--accent-hi); }
+.sendvia__note { margin: .8rem 0 0; font-size: .85rem; color: var(--mist); min-height: 1.2em; }
+
 /* ── Footer ────────────────────────────────────────────────── */
 .footer { background: var(--night); color: #9FB6C6; padding-block: 3rem 2.25rem; }
 .footer__inner { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; align-items: start; }

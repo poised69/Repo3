@@ -6,12 +6,19 @@
   'use strict';
 
   /* Where contact-form submissions go, in order of preference:
-       1. FORM_ENDPOINT below, if set (a Formspree URL, a serverless function,
-          a Make.com webhook, or anything that accepts a JSON POST).
+       1. FORM_ENDPOINT below, if set. Currently a Make.com webhook, posted
+          as form-urlencoded.
        2. Netlify Forms, picked up automatically when the site is hosted on
           Netlify (the form carries data-netlify="true").
-       3. The visitor's own mail client, pre-filled. Always works, anywhere. */
-  var FORM_ENDPOINT = '';
+       3. A chooser offering Gmail, Outlook web, the visitor's own mail app, or
+          copy to clipboard. Deliberately NOT a bare mailto: redirect: on Windows
+          that hands the visitor to Outlook, which most of them never use. */
+
+  /* Make scenario "Poised - Website Enquiry Intake" (eu1, scenario 7285409).
+     It writes the enquiry to the Website Enquiries Airtable base and an Airtable
+     automation emails it on. This URL is public by necessity, since it ships in
+     the page, so the scenario does nothing destructive and only ever appends. */
+  var FORM_ENDPOINT = 'https://hook.eu1.make.com/5hxm2vteax2cum0p3lwoyxete2shm31y';
   var EMAIL = 'info.poisedautomation@gmail.com';
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -273,6 +280,48 @@
       status.className = 'form__status' + (kind ? ' is-' + kind : '');
     };
 
+    var sendVia = document.getElementById('sendVia');
+    var sendViaNote = document.getElementById('sendViaNote');
+    var viaCopy = document.getElementById('viaCopy');
+    /* the message the visitor is about to send, shared by the copy button and
+       the three compose links so they can never drift apart */
+    var composed = '';
+
+    var copyText = function (text) {
+      /* the async clipboard API rejects in plenty of ordinary situations, such as
+         an unfocused document or a denied permission, so always keep the old
+         execCommand path available behind it rather than giving up */
+      var legacy = function () {
+        return new Promise(function (resolve, reject) {
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          ta.setAttribute('readonly', '');
+          ta.style.position = 'fixed';
+          ta.style.top = '-1000px';
+          document.body.appendChild(ta);
+          ta.select();
+          var ok = false;
+          try { ok = document.execCommand('copy'); } catch (err) { ok = false; }
+          document.body.removeChild(ta);
+          ok ? resolve() : reject(new Error('copy failed'));
+        });
+      };
+      if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(text).catch(legacy);
+      }
+      return legacy();
+    };
+
+    if (viaCopy) {
+      viaCopy.addEventListener('click', function () {
+        copyText(composed).then(function () {
+          sendViaNote.textContent = 'Copied. Paste it into an email to ' + EMAIL + '.';
+        }).catch(function () {
+          sendViaNote.textContent = 'Could not copy automatically. Our address is ' + EMAIL + '.';
+        });
+      });
+    }
+
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var hp = form.elements['bot-field'];
@@ -291,35 +340,69 @@
         task: form.elements.task.value.trim()
       };
 
-      var mailtoFallback = function (note) {
+      /* Nothing accepted the submission in the background. Rather than firing
+         mailto: at whatever client the OS registered, show the visitor their
+         options and let them pick. */
+      var offerSendOptions = function () {
         var subject = 'Automation enquiry from ' + data.name;
         var body = 'Name: ' + data.name + '\nEmail: ' + data.email +
                    '\n\nThe repetitive task:\n' + data.task + '\n';
-        window.location.href = 'mailto:' + EMAIL +
-          '?subject=' + encodeURIComponent(subject) +
-          '&body=' + encodeURIComponent(body);
-        say(note || ('Opening your email app with the message ready to send. ' +
-            'If nothing happens, write to ' + EMAIL + '.'), 'ok');
+        var to = encodeURIComponent(EMAIL);
+        var s = encodeURIComponent(subject);
+        var b = encodeURIComponent(body);
+
+        composed = 'To: ' + EMAIL + '\nSubject: ' + subject + '\n\n' + body;
+
+        var gmail = document.getElementById('viaGmail');
+        var outlook = document.getElementById('viaOutlook');
+        var app = document.getElementById('viaApp');
+
+        gmail.href = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + to + '&su=' + s + '&body=' + b;
+        outlook.href = 'https://outlook.live.com/mail/0/deeplink/compose?to=' + to +
+                       '&subject=' + s + '&body=' + b;
+        app.href = 'mailto:' + EMAIL + '?subject=' + s + '&body=' + b;
+
+        /* they already typed their own address, so point at the matching webmail */
+        var domain = (data.email.split('@')[1] || '').toLowerCase();
+        var suggested = null;
+        if (domain === 'gmail.com' || domain === 'googlemail.com') suggested = gmail;
+        else if (/^(outlook|hotmail|live|msn)\./.test(domain)) suggested = outlook;
+        [gmail, outlook, app].forEach(function (el) {
+          el.classList.toggle('is-suggested', el === suggested);
+        });
+
+        sendViaNote.textContent = '';
+        sendVia.hidden = false;
+        /* the panel carries its own heading, and focus moves into it, so the
+           status line stays empty rather than repeating the same sentence */
+        say('');
+        gmail.focus();
       };
 
       var sent = function () {
+        if (sendVia) sendVia.hidden = true;
         form.reset();
         say('Got it, thank you. You\'ll hear back from us within a day.', 'ok');
       };
 
-      /* 1. an explicit endpoint (Formspree or similar) wins */
+      /* 1. an explicit endpoint (the Make webhook) wins */
       if (FORM_ENDPOINT) {
         submit.disabled = true;
         say('Sending…');
+        /* Sent as form-urlencoded on purpose. That content type is CORS
+           safelisted, so the browser posts straight away instead of first
+           asking the endpoint to answer a preflight OPTIONS it may not
+           handle. Passing URLSearchParams as the body sets the header. */
+        var payload = new URLSearchParams();
+        Object.keys(data).forEach(function (k) { payload.append(k, data[k]); });
         fetch(FORM_ENDPOINT, {
           method: 'POST',
-          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
+          body: payload
         }).then(function (res) {
           if (!res.ok) throw new Error('bad response');
           sent();
         }).catch(function () {
-          mailtoFallback('Couldn\'t reach the form service. Opening your email app instead.');
+          offerSendOptions();
         }).then(function () {
           submit.disabled = false;
         });
@@ -341,16 +424,16 @@
           if (!res.ok) throw new Error('bad response');
           sent();
         }).catch(function () {
-          /* not on Netlify, or forms are disabled, so hand it to the mail client */
-          mailtoFallback();
+          /* not on Netlify, or forms are disabled, so let the visitor choose */
+          offerSendOptions();
         }).then(function () {
           submit.disabled = false;
         });
         return;
       }
 
-      /* 3. plain mailto */
-      mailtoFallback();
+      /* 3. no backend at all, so the visitor picks where to send from */
+      offerSendOptions();
     });
   }
 
