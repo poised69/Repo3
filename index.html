@@ -387,6 +387,21 @@
         </div>
         <button class="btn btn--accent btn--block" type="submit" id="submitBtn">Send it over</button>
         <p class="form__status" id="formStatus" role="status" aria-live="polite"></p>
+
+        <!-- Only shown when the submission cannot go through in the background.
+             Firing mailto: at the OS default client drops most Windows visitors
+             into Outlook, which they never use, so let them pick instead. -->
+        <div class="sendvia" id="sendVia" role="group" aria-labelledby="sendViaLead" hidden>
+          <p class="sendvia__lead" id="sendViaLead">Your message is ready. Choose where to send it from:</p>
+          <div class="sendvia__opts">
+            <a class="sendvia__opt" id="viaGmail" href="#" target="_blank" rel="noopener noreferrer">Gmail</a>
+            <a class="sendvia__opt" id="viaOutlook" href="#" target="_blank" rel="noopener noreferrer">Outlook</a>
+            <a class="sendvia__opt" id="viaApp" href="#">Mail app</a>
+            <button class="sendvia__opt" id="viaCopy" type="button">Copy message</button>
+          </div>
+          <p class="sendvia__note" id="sendViaNote" role="status" aria-live="polite"></p>
+        </div>
+
         <p class="form__alt">
           Prefer plain email? <a href="mailto:info.poisedautomation@gmail.com">info.poisedautomation@gmail.com</a>
         </p>
