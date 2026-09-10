@@ -112,7 +112,7 @@ grep -rl "poisedautomation.netlify.app" . | xargs sed -i 's#https://poisedautoma
 `assets/js/main.js` tries three things in order and stops at the first one that works.
 
 1. **`FORM_ENDPOINT`**, at the top of the file. This is the live path: a Make webhook that
-   writes the enquiry to Airtable, which then emails it on. Details below.
+   writes the enquiry to Airtable and emails it on. Details below.
 2. **Netlify Forms**, automatic when the site is hosted on Netlify. Kept as a backstop in
    case the webhook is ever unreachable. Note that form detection has to be switched on in
    the Netlify project or this tier does nothing.
@@ -126,8 +126,10 @@ A hidden honeypot field called `bot-field` silently drops the most common spam b
 ### The live intake pipeline
 
 ```
-contact form  ──POST──▶  Make webhook  ──▶  Airtable row  ──▶  Airtable automation
-                         (scenario 7285409)   (Enquiries)        emails info.poised...
+                                       ┌──▶  Airtable row (Enquiries)
+contact form ──POST──▶  Make webhook ──┤
+                        (scenario        └──▶  Gmail to info.poisedautomation@gmail.com
+                         7285409)
 ```
 
 | Piece | Where |
@@ -136,18 +138,33 @@ contact form  ──POST──▶  Make webhook  ──▶  Airtable row  ──
 | Make webhook | hook id `3678311` |
 | Airtable base | "Poised Automation — Website Enquiries", `appvJfOM2Csxn8MXD` |
 | Airtable table | `Enquiries`, `tbl5FdGw85HxAMZqU` |
-| Airtable automation | "Email me a new website enquiry", `wfl5uAlWArOmdanJu` |
+| Gmail connection | "Info Poised.", id `10556000`, module `google-email:sendAnEmail` v4 |
 
-The Make scenario ends with a Webhook Response module that returns `200` with
-`Access-Control-Allow-Origin: *`. Without that header the browser would block the page from
-reading the reply and the form would fall through to tier 3 even on a successful save. The
-POST is sent form-urlencoded rather than JSON on purpose: that content type is CORS
-safelisted, so the browser skips the preflight `OPTIONS` request entirely.
+The scenario answers the browser first, in module 2, before it writes anything. A Webhook
+Response module returns `200` and `{"ok":true}` with `Access-Control-Allow-Origin: *`.
+Without that header the browser would block the page from reading the reply and the form
+would fall through to tier 3 even on a successful save. Answering first also means a slow
+Airtable or Gmail call can never make the page think the send failed. The POST is sent
+form-urlencoded rather than JSON on purpose: that content type is CORS safelisted, so the
+browser skips the preflight `OPTIONS` request entirely.
 
-The email is sent by Airtable, not by Make. Make's Gmail module rejects both Gmail
-connections in the account as incompatible, so rather than block on re-authorising, the
-notification uses Airtable's built-in `sendEmail`, which needs no credential. The visitor's
-address is set as Reply-To, so replying answers them directly.
+A router then splits the traffic. A request that carries an email address is saved to
+Airtable and emailed on, with the visitor's address set as Reply-To so replying answers
+them directly. A request that carries nothing is parked as a single row that records the
+HTTP method and headers it arrived with, so junk hits are visible rather than silent, and
+they never reach the inbox.
+
+The notification is sent by Make through the info.poisedautomation@gmail.com Gmail
+connection. It used to be sent by an Airtable automation, and that never worked once:
+Airtable's built-in `sendEmail` can only write to people who collaborate on the base, so
+every run failed with `NON_COLLABORATOR_RECIPIENTS` and no notification ever went out. Do
+not move the email back into Airtable unless that address is added as a collaborator first.
+The retired automation, `wfl5uAlWArOmdanJu`, still exists with a harmless read in place of
+its email step. Switch it off in the Airtable UI and it can then be deleted.
+
+Because the mail is sent from info.poisedautomation@gmail.com to the same address, Gmail
+files one copy under both Inbox and Sent. That is one email shown in two places, not two
+emails. Point the `to` field at another address if you would rather see it only once.
 
 The webhook URL ships in public JavaScript, which is unavoidable for a browser-submitted
 form. The scenario only ever appends a row, so the worst a stranger can do is create junk

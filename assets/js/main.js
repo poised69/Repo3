@@ -15,9 +15,10 @@
           that hands the visitor to Outlook, which most of them never use. */
 
   /* Make scenario "Poised - Website Enquiry Intake" (eu1, scenario 7285409).
-     It writes the enquiry to the Website Enquiries Airtable base and an Airtable
-     automation emails it on. This URL is public by necessity, since it ships in
-     the page, so the scenario does nothing destructive and only ever appends. */
+     It answers this request first, then writes the enquiry to the Website
+     Enquiries Airtable base and emails it to the studio inbox. This URL is
+     public by necessity, since it ships in the page, so the scenario does
+     nothing destructive and only ever appends. */
   var FORM_ENDPOINT = 'https://hook.eu1.make.com/5hxm2vteax2cum0p3lwoyxete2shm31y';
   var EMAIL = 'info.poisedautomation@gmail.com';
 
