@@ -157,10 +157,9 @@ they never reach the inbox.
 The notification is sent by Make through the info.poisedautomation@gmail.com Gmail
 connection. It used to be sent by an Airtable automation, and that never worked once:
 Airtable's built-in `sendEmail` can only write to people who collaborate on the base, so
-every run failed with `NON_COLLABORATOR_RECIPIENTS` and no notification ever went out. Do
-not move the email back into Airtable unless that address is added as a collaborator first.
-The retired automation, `wfl5uAlWArOmdanJu`, still exists with a harmless read in place of
-its email step. Switch it off in the Airtable UI and it can then be deleted.
+every run failed with `NON_COLLABORATOR_RECIPIENTS` and no notification ever went out. That
+automation has been deleted and the base now holds none. Do not move the email back into
+Airtable unless that address is added as a base collaborator first.
 
 Because the mail is sent from info.poisedautomation@gmail.com to the same address, Gmail
 files one copy under both Inbox and Sent. That is one email shown in two places, not two
