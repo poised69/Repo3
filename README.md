@@ -165,6 +165,20 @@ Because the mail is sent from info.poisedautomation@gmail.com to the same addres
 files one copy under both Inbox and Sent. That is one email shown in two places, not two
 emails. Point the `to` field at another address if you would rather see it only once.
 
+### Why the notification reads the way it does
+
+Everything in that email is written to be safe for the visitor to read. When you hit Reply,
+your mail client quotes the whole notification underneath your answer, and that quote goes
+to them. So the notification says nothing operational: no "hit reply and it goes back to
+them", no mention of Airtable, no note about where a copy is stored. What is left is the
+visitor's own name, address and message, which reads back to them as a tidy record of what
+they sent.
+
+The subject works the same way. It is "Enquiry from NAME to Poised Automation", so your
+reply reaches them as "Re: Enquiry from NAME to Poised Automation", which reads like a
+reply from the studio rather than a ticket number. Keep any future wording to the same
+test: would you be happy for the person who filled the form to read this sentence?
+
 The webhook URL ships in public JavaScript, which is unavoidable for a browser-submitted
 form. The scenario only ever appends a row, so the worst a stranger can do is create junk
 records and spend Make operations.
