@@ -179,6 +179,25 @@ reply reaches them as "Re: Enquiry from NAME to Poised Automation", which reads 
 reply from the studio rather than a ticket number. Keep any future wording to the same
 test: would you be happy for the person who filled the form to read this sentence?
 
+### Answer with Write back, not with Reply
+
+Careful wording only limits the damage. It does not remove it. Press Reply on the
+notification and Gmail pastes the entire notification underneath your answer, and the
+person who filled the form reads it. That quoting happens inside Gmail, at the moment you
+press Reply, so nothing in this scenario can switch it off.
+
+Worse, they always see it in full. Gmail hides a quote behind the small dots only when the
+reader already holds the message being quoted. The visitor never received the notification,
+so for them there is nothing to collapse and the whole thing is on screen.
+
+So the notification carries a **Write back** button, and that is the way to answer. It
+opens a brand new Gmail compose addressed to them, subject "Re: your enquiry to Poised
+Automation", body starting "Hi NAME,". A new compose starts empty, so nothing from the
+notification can travel back. Proved end to end on 10 September by sending along that exact
+path between the two studio addresses: what arrived held the reply and nothing else.
+
+If you ever do press Reply, delete the quoted block before sending.
+
 The webhook URL ships in public JavaScript, which is unavoidable for a browser-submitted
 form. The scenario only ever appends a row, so the worst a stranger can do is create junk
 records and spend Make operations.
