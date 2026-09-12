@@ -12,6 +12,15 @@
   status = 404
   force = true
 
+# The README is the operator's own notes and it names an Airtable base and table. The publish root is
+# ".", so it was being served at /README.md to anyone who typed it. It stays in the repository and
+# stops being a web page. Same for the .md files any future tooling drops in the root.
+[[redirects]]
+  from = "/README.md"
+  to = "/404.html"
+  status = 404
+  force = true
+
 [[headers]]
   for = "/*"
   [headers.values]
