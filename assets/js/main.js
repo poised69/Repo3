@@ -318,7 +318,7 @@
         copyText(composed).then(function () {
           sendViaNote.textContent = 'Copied. Paste it into an email to ' + EMAIL + '.';
         }).catch(function () {
-          sendViaNote.textContent = 'Could not copy automatically. Our address is ' + EMAIL + '.';
+          sendViaNote.textContent = 'Could not copy automatically. My address is ' + EMAIL + '.';
         });
       });
     }
@@ -345,7 +345,7 @@
          mailto: at whatever client the OS registered, show the visitor their
          options and let them pick. */
       var offerSendOptions = function () {
-        var subject = 'Automation enquiry from ' + data.name;
+        var subject = 'Website inquiry from ' + data.name;
         var body = 'Name: ' + data.name + '\nEmail: ' + data.email +
                    '\n\nThe repetitive task:\n' + data.task + '\n';
         var to = encodeURIComponent(EMAIL);
@@ -383,7 +383,7 @@
       var sent = function () {
         if (sendVia) sendVia.hidden = true;
         form.reset();
-        say('Got it, thank you. You\'ll hear back from us within a day.', 'ok');
+        say('Got it, thank you. You will hear back from me within a day.', 'ok');
       };
 
       /* 1. an explicit endpoint (the Make webhook) wins */
